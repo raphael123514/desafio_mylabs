@@ -30,7 +30,7 @@ class AulaController extends Controller
      */
     public function create()
     {
-        return view('admin.form');
+        return view('admin.aula.form');
     }
 
     /**
@@ -73,7 +73,7 @@ class AulaController extends Controller
     public function edit($id)
     {
         $aula = Aula::find($id);
-        return view('admin.form', ['aula' => $aula]);
+        return view('admin.aula.form', ['aula' => $aula]);
     }
 
     /**
