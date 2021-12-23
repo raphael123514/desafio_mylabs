@@ -57,8 +57,6 @@
         url:"{{route('aula.listar')}}",
         cache:false,
         onLoadSuccess: function (data, d) {
-            console.log(data);
-            console.log(d);
         },
         onLoadError: function(data, d){
             console.log(d);
@@ -92,15 +90,21 @@
         var urlDelete = "{{ route('aula.delete', ['id' => ':id']) }}"; 
 
         urlDelete = urlDelete.replace(":id", row.id);
-
         return [
             `
             <div class='row' style="padding-left: 25%">
-                <div class="col-md-5" data-toggle="tooltip" title="Atualizar Situação"  style="font-size: 22px;" >
+                <div class="col-md-5" data-toggle="tooltip" title="Editar"  style="font-size: 22px;" >
                     <a href="${urlEdit}"> <i class="far fa-edit" style="color: rgb(9, 43, 192)"></i></a>
                 </div>
-                <div class="col-md-4" data-toggle="tooltip" title="Informações" style="font-size: 22px;">
-                    <a href="${urlDelete}"><i class="fas fa-trash-alt" style="color: rgb(252, 0, 0)"></i></a> 
+                <div class="col-md-4" data-toggle="tooltip" title="Remover" style="font-size: 22px;">
+                    <a href="${urlDelete}" onclick="event.preventDefault();
+                                                    document.getElementById('delete-form').submit();">
+                        <i class="fas fa-trash-alt" style="color: rgb(252, 0, 0)"></i>
+                    </a> 
+                    <form id="delete-form" action="${urlDelete}" method="POST" class="d-none">
+                        @method('DELETE')
+                        @csrf
+                    </form>
                 </div>
             </div>`]
     

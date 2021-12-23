@@ -87,7 +87,7 @@ class AulaController extends Controller
     {
         try {
             $this->validaAgendaAulas($request);
-            
+
             $aula = Aula::find($id);
             $aula->update($request->all());
 
@@ -95,7 +95,8 @@ class AulaController extends Controller
             return Redirect::to("/admin/aula/edit/".$id);
 
         } catch(\Exception $exception) {
-            return $exception->getMessage();
+            \Session::flash('mensagem_erro', $Exception->getMessage());
+            return Redirect::to("/admin/aula/edit/".$id);
         }
     }
 
@@ -107,7 +108,16 @@ class AulaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            Aula::where('id', $id)->delete();
+
+            \Session::flash('mensagem_sucesso','Aula excluída com sucesso!');
+            return Redirect::to("/admin/aula");
+        } catch(\Exception $exception) {
+            \Session::flash('mensagem_erro', $exception->getMessage());
+            return Redirect::to("/admin/aula");
+        }
+        
     }
 
     public function listar()
