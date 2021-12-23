@@ -85,10 +85,14 @@
     }
     
     function acoesFormatter(value, row, index) {
-        var urlEdit = "{{ route('aula.edit', ['id' => ':id']) }}"; // isso vai compilar o blade com o id sendo uma string ":id" e, no javascript, atribuir ela a uma variável .
+        var urlEdit = "{{ route('aula.edit', ['id' => ':id']) }}"; 
 
         urlEdit = urlEdit.replace(":id", row.id);
-        
+
+        var urlDelete = "{{ route('aula.delete', ['id' => ':id']) }}"; 
+
+        urlDelete = urlDelete.replace(":id", row.id);
+
         return [
             `
             <div class='row' style="padding-left: 25%">
@@ -96,7 +100,7 @@
                     <a href="${urlEdit}"> <i class="far fa-edit" style="color: rgb(9, 43, 192)"></i></a>
                 </div>
                 <div class="col-md-4" data-toggle="tooltip" title="Informações" style="font-size: 22px;">
-                    <a href="${url}"><i class="fas fa-trash-alt" style="color: rgb(252, 0, 0)"></i></a> 
+                    <a href="${urlDelete}"><i class="fas fa-trash-alt" style="color: rgb(252, 0, 0)"></i></a> 
                 </div>
             </div>`]
     

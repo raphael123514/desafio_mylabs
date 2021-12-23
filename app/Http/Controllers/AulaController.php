@@ -44,28 +44,14 @@ class AulaController extends Controller
         try {
             $aula = new Aula();
 
-            $datas = Aula::select('id','dataHoraAula', 'duracao')->get();
-
-            $totalRequest = $this->somaDataHora($request);
-            $dataInicioResquest = date("Y-m-d G:i",strtotime($request->dataHoraAula));
-            
-            foreach ($datas as $key => $d) {
-                $total = $this->somaDataHora($d);
-
-                if ($total > $dataInicioResquest &&  $total < $totalRequest) {
-                    \Session::flash('mensagem_erro', "Já existe uma aula nesse horario.");
-                    return Redirect::to("/admin/aula/novo");
-                }
-                
-            }
-
+            $this->validaAgendaAulas($request);
 
             $aula->fill([
                 'nome' => $request->nome,
                 'qtdeMaxima'=> $request->qtdeMaxima,
                 'nomeProf'=> $request->nomeProf,
                 'duracao'=> $request->duracao,
-                'dataHoraAula' => $dataInicioResquest
+                'dataHoraAula' => date("Y-m-d G:i", strtotime($request->dataHoraAula))
             ]);
             $aula->save();
 
@@ -79,17 +65,6 @@ class AulaController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -97,7 +72,8 @@ class AulaController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.form');
+        $aula = Aula::find($id);
+        return view('admin.form', ['aula' => $aula]);
     }
 
     /**
@@ -109,7 +85,18 @@ class AulaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $this->validaAgendaAulas($request);
+            
+            $aula = Aula::find($id);
+            $aula->update($request->all());
+
+            \Session::flash('mensagem_sucesso','Aula atualizada com sucesso!');
+            return Redirect::to("/admin/aula/edit/".$id);
+
+        } catch(\Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 
     /**
@@ -157,6 +144,28 @@ class AulaController extends Controller
         $duracao = vsprintf(" +%d hours +%d minutes +%d seconds", explode(':', $this->convertHoras(round($request->duracao / 60, 2)))); 
 
         return date('Y-m-d G:i',strtotime($data_hora.$duracao));
+    }
+
+    public function validaAgendaAulas($request)
+    {
+        try {
+            $totalRequest = $this->somaDataHora($request);
+            $dataInicioResquest = date("Y-m-d G:i", strtotime($request->dataHoraAula));
+            
+            $datas = Aula::select('id','dataHoraAula', 'duracao')->get();
+            
+            foreach ($datas as $key => $d) {
+                $total = $this->somaDataHora($d);
+
+                if ($total > $dataInicioResquest &&  $total < $totalRequest) {
+                    \Session::flash('mensagem_erro', "Já existe uma aula nesse horario.");
+                    return Redirect::to("/admin/aula/novo");
+                }
+                
+            }
+        } catch(\Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 
 }

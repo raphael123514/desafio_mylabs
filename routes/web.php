@@ -36,5 +36,5 @@ Route::get('admin/aula/novo', [App\Http\Controllers\AulaController::class, 'crea
 Route::post('admin/aula/store', [App\Http\Controllers\AulaController::class, 'store'])->name('aula.store');
 Route::get('admin/aula/listar', [App\Http\Controllers\AulaController::class, 'listar'])->name('aula.listar');
 Route::get('admin/aula/edit/{id}', [App\Http\Controllers\AulaController::class, 'edit'])->name('aula.edit');
-
-
+Route::patch('admin/aula/update/{id}', [App\Http\Controllers\AulaController::class, 'update'])->name('aula.update');
+Route::delete('admin/aula/delete/{id}', [App\Http\Controllers\AulaController::class, 'delete'])->name('aula.delete');
