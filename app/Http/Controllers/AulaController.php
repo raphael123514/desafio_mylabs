@@ -72,9 +72,8 @@ class AulaController extends Controller
             \Session::flash('mensagem_sucesso','Aula adicionada com sucesso!');
             return Redirect::to("/admin/aula");
         } catch (\Exception $Exception){
-            return ["msg" => $Exception->getMessage(), 'line' => $Exception->getLine(), 'file' => $Exception->getFile()];
-            // \Session::flash('mensagem_erro', $Exception->getMessage());
-            // return Redirect::to("/admin/aula/novo");
+            \Session::flash('mensagem_erro', $Exception->getMessage());
+            return Redirect::to("/admin/aula/novo");
 
         }
     }
@@ -98,7 +97,7 @@ class AulaController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('admin.form');
     }
 
     /**
@@ -129,7 +128,7 @@ class AulaController extends Controller
         try {
             $aulas = Aula::all();
 
-            return ["total" => $aulas->count(), 'data' => $aulas ];
+            return ["total" => $aulas->count(), 'rows' => $aulas ];
 
         } catch(\Exception $exception) {
             return $exception->getMessage();

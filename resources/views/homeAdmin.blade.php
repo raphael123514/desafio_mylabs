@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css">
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -32,11 +33,12 @@
                         >
                             <thead>
                               <tr>
-                                <th data-field="Data/Hora">Dia</th>
+                                <th data-field="dataHoraAula" data-formatter="transDataBR">Dia</th>
                                 <th data-field="nome">Aula</th>
                                 <th data-field="nomeProf">Professor</th>
-                                <th data-field="qtdeMaximo">Qtde de alunos Máximo</th>
-                                <th>Qtde de alunos</th>
+                                <th data-field="qtdeMaxima" data-align="center">Qtde de alunos Máximo</th>
+                                <th data-field="qtdeAlunos" data-align="center">Qtde de alunos</th>
+                                <th data-field="acoes" data-formatter="acoesFormatter" data-align="center">Ações</th>
                               </tr>
                             </thead>
                         </table>
@@ -46,13 +48,17 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+
 <script>
     $table = $("#table");
-
     $table.bootstrapTable({
         url:"{{route('aula.listar')}}",
         cache:false,
         onLoadSuccess: function (data, d) {
+            console.log(data);
+            console.log(d);
         },
         onLoadError: function(data, d){
             console.log(d);
@@ -64,6 +70,37 @@
             };
         },
     });
+
+    function transDataBR(data) {
+        if(data){
+            data = new Date(data);
+            data = pad(data.getDate()) + "/" + pad(data.getMonth()  + 1 ) + "/" + pad(data.getFullYear()) + " " + pad(data.getHours()) + ":" + pad(data.getMinutes()) + ":" + pad(data.getSeconds());
+
+        }
+        return data;    
+    }
+
+    function pad(d) {
+        return (d < 10) ? '0' + d.toString() : d.toString();
+    }
+    
+    function acoesFormatter(value, row, index) {
+        var urlEdit = "{{ route('aula.edit', ['id' => ':id']) }}"; // isso vai compilar o blade com o id sendo uma string ":id" e, no javascript, atribuir ela a uma variável .
+
+        urlEdit = urlEdit.replace(":id", row.id);
+        
+        return [
+            `
+            <div class='row' style="padding-left: 25%">
+                <div class="col-md-5" data-toggle="tooltip" title="Atualizar Situação"  style="font-size: 22px;" >
+                    <a href="${urlEdit}"> <i class="far fa-edit" style="color: rgb(9, 43, 192)"></i></a>
+                </div>
+                <div class="col-md-4" data-toggle="tooltip" title="Informações" style="font-size: 22px;">
+                    <a href="${url}"><i class="fas fa-trash-alt" style="color: rgb(252, 0, 0)"></i></a> 
+                </div>
+            </div>`]
+    
+    }
 
 </script>
 @endsection
