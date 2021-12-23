@@ -14,11 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 //ROTAS ADMIN AUTH
 
@@ -37,3 +36,8 @@ Route::get('admin/aula/listar', [App\Http\Controllers\AulaController::class, 'li
 Route::get('admin/aula/edit/{id}', [App\Http\Controllers\AulaController::class, 'edit'])->name('aula.edit');
 Route::patch('admin/aula/update/{id}', [App\Http\Controllers\AulaController::class, 'update'])->name('aula.update');
 Route::delete('admin/aula/delete/{id}', [App\Http\Controllers\AulaController::class, 'destroy'])->name('aula.delete');
+
+// ROTAS ALUNO
+
+Route::get('aula/listar', [App\Http\Controllers\AlunoController::class, 'listar'])->name('aluno.aula.listar');
+Route::post('aluno/checkin', [App\Http\Controllers\AlunoController::class, 'checkin'])->name('aluno.checkin');

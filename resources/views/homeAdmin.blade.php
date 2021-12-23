@@ -21,7 +21,7 @@
                         </div>
                     @endif
                     <div class="row">
-                        <div class="md-col-3">
+                        <div class="col-md-3">
                             <a href="{{route('aula.create')}}"><button type="button" class="btn btn-primary">Adicionar Aula</button></a>
                         </div>
                     </div>
@@ -33,11 +33,12 @@
                         >
                             <thead>
                               <tr>
-                                <th data-field="dataHoraAula" data-formatter="transDataBR">Dia</th>
+                                <th data-field="data_hora" data-formatter="transDataBRDia">Dia</th>
+                                <th data-field="data_hora" data-formatter="transDataBRHora">Hora</th>
                                 <th data-field="nome">Aula</th>
-                                <th data-field="nomeProf">Professor</th>
-                                <th data-field="qtdeMaxima" data-align="center">Qtde de alunos Máximo</th>
-                                <th data-field="qtdeAlunos" data-align="center">Qtde de alunos</th>
+                                <th data-field="nome_prof">Professor</th>
+                                <th data-field="qtde_maxima" data-align="center">Qtde de alunos Máximo</th>
+                                <th data-field="qtde_alunos" data-align="center">Qtde de alunos</th>
                                 <th data-field="acoes" data-formatter="acoesFormatter" data-align="center">Ações</th>
                               </tr>
                             </thead>
@@ -69,10 +70,19 @@
         },
     });
 
-    function transDataBR(data) {
+    function transDataBRDia(data) {
         if(data){
             data = new Date(data);
-            data = pad(data.getDate()) + "/" + pad(data.getMonth()  + 1 ) + "/" + pad(data.getFullYear()) + " " + pad(data.getHours()) + ":" + pad(data.getMinutes()) + ":" + pad(data.getSeconds());
+            data = pad(data.getDate()) + "/" + pad(data.getMonth()  + 1 ) + "/" + pad(data.getFullYear());
+
+        }
+        return data;    
+    }
+
+    function transDataBRHora(data) {
+        if(data){
+            data = new Date(data);
+            data = pad(data.getHours()) + ":" + pad(data.getMinutes());
 
         }
         return data;    

@@ -20,9 +20,13 @@
                             {{ session('mensagem_erro') }}
                         </div>
                     @endif
-                    <div class="row">
-                        <div class="md-col-3">
-                            <a href="{{route('aula.create')}}"><button type="button" class="btn btn-primary">Adicionar Aula</button></a>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <select class="form-control" id="opcaoData">
+                                <option value="0">Dia atual</option>
+                                <option value="1">Semana</option>
+                            </select>
+                          
                         </div>
                     </div>
                     <br>
@@ -33,12 +37,10 @@
                         >
                             <thead>
                             <tr>
-                                <th data-field="dataHoraAula" data-formatter="transDataBRDia">Dia</th>
-                                <th data-field="dataHoraAula" data-formatter="transDataBRHora">Hora</th>
+                                <th data-field="data_hora" data-formatter="transDataBRDia">Dia</th>
+                                <th data-field="data_hora" data-formatter="transDataBRHora">Hora</th>
                                 <th data-field="nome">Aula</th>
-                                <th data-field="nomeProf">Professor</th>
-                                <th data-field="qtdeMaxima" data-align="center">Qtde de alunos Máximo</th>
-                                <th data-field="qtdeAlunos" data-align="center">Qtde de alunos</th>
+                                <th data-field="qtde_maxima" data-align="center">Vagas disponíveis</th>
                                 <th data-field="acoes" data-formatter="acoesFormatter" data-align="center">Ações</th>
                             </tr>
                             </thead>
@@ -55,7 +57,7 @@
 <script>
     $table = $("#table");
     $table.bootstrapTable({
-        url:"{{route('aula.listar')}}",
+        url:"{{route('aluno.aula.listar')}}",
         cache:false,
         onLoadSuccess: function (data, d) {
         },
@@ -65,10 +67,15 @@
         },
         queryParams: function (p) {
             return {
+                opcaoData: $("#opcaoData").val(), 
                 params:p
             };
         },
     });
+
+    $("#opcaoData").change(function(){
+        $table.bootstrapTable('refresh')
+    })
 
     function transDataBRDia(data) {
         if(data){
@@ -93,9 +100,9 @@
     }
     
     function acoesFormatter(value, row, index) {
-        var urlEdit = "{{ route('aula.edit', ['id' => ':id']) }}"; 
+        var urlCheckin = "{{ route('aluno.checkin', ['id' => ':id']) }}"; 
 
-        urlEdit = urlEdit.replace(":id", row.id);
+        urlCheckin = urlCheckin.replace(":id", row.id);
 
         var urlDelete = "{{ route('aula.delete', ['id' => ':id']) }}"; 
 
@@ -103,8 +110,8 @@
         return [
             `
             <div class='row' style="padding-left: 25%">
-                <div class="col-md-5" data-toggle="tooltip" title="Editar"  style="font-size: 22px;" >
-                    <a href="${urlEdit}"> <i class="far fa-edit" style="color: rgb(9, 43, 192)"></i></a>
+                <div class="col-md-5" data-toggle="tooltip" title="Checkin"  style="font-size: 22px;" >
+                    <a href="${urlCheckin}"> <i class="fas fa-check-circle" style="color: rgb(44, 230, 38)"></i></a>
                 </div>
                 <div class="col-md-4" data-toggle="tooltip" title="Remover" style="font-size: 22px;">
                     <a href="${urlDelete}" onclick="event.preventDefault();

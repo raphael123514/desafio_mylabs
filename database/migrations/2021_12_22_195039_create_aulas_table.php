@@ -16,10 +16,10 @@ class CreateAulasTable extends Migration
         Schema::create('aulas', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->integer('qtdeMaxima');
-            $table->string('nomeProf');
+            $table->integer('qtde_maxima');
+            $table->string('nome_prof');
             $table->integer('duracao');
-            $table->dateTime('dataHoraAula');
+            $table->dateTime('data_hora');
             $table->timestamps();
         });
     }

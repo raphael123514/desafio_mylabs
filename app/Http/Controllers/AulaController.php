@@ -48,10 +48,10 @@ class AulaController extends Controller
 
             $aula->fill([
                 'nome' => $request->nome,
-                'qtdeMaxima'=> $request->qtdeMaxima,
-                'nomeProf'=> $request->nomeProf,
+                'qtde_maxima'=> $request->qtdeMaxima,
+                'nome_prof'=> $request->nomeProf,
                 'duracao'=> $request->duracao,
-                'dataHoraAula' => date("Y-m-d G:i", strtotime($request->dataHoraAula))
+                'data_hora' => date("Y-m-d G:i", strtotime($request->dataHoraAula))
             ]);
             $aula->save();
 

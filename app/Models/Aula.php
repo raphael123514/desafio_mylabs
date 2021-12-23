@@ -11,10 +11,10 @@ class Aula extends Model
     protected $fillable = [
         'id',
         'nome',
-        'qtdeMaxima',
-        'nomeProf',
+        'qtde_maxima',
+        'nome_prof',
         'duracao',
-        'dataHoraAula',
+        'data_hora',
     ];
 
     
