@@ -23,10 +23,8 @@ class AdminLoginController extends Controller
         ];
 
         $autenticado = Auth::guard('admin')->attempt($credentials, $request->remember);
-
         if ($autenticado) {
-
-            return redirect()->intended(route('admin.dashboard'));
+            return redirect(route('admin.dashboard'));
         }
         
         return redirect()->back()->withInput($request->only('email', 'remember'));
