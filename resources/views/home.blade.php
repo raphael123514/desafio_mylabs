@@ -109,13 +109,19 @@
             return [
                 `
                 <div class='row' style="padding-left: 25%">
-                    <div class="col-md-1" data-toggle="tooltip" title="Checkin"  style="font-size: 22px;" >
+                    <div class="col-md-5" data-toggle="tooltip" title="Checkin"  style="font-size: 22px;" >
                         <a onclick="checkin(${row.id})" style="cursor: pointer">
                             <i class="fas fa-check-circle" style="color: rgb(44, 230, 38)"></i>
                         </a>
                         
                     </div>
-                </div>`]
+                    <div class="col-md-4" data-toggle="tooltip" title="Checkout" style="font-size: 22px;">
+                        <a onclick="checkout(${row.id})" style="cursor: pointer">
+                            <i class="fas fa-sign-out-alt" style="color: rgb(252, 0, 0)"></i>
+                        </a> 
+                    </div>
+                </div>`
+            ]
             
         } 
         return "";
@@ -133,6 +139,35 @@
             data: {id : id}, 
             type: 'POST',
             url: "{{route('aluno.checkin')}}",
+            success: function(data){
+                $table.bootstrapTable('refresh')
+
+                Swal.fire({
+                    icon: 'success',
+                    text: data
+                })
+            },
+            error: function(data) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.responseJSON.message
+                })
+            }
+        });
+    }
+
+    function checkout(id) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        }); 
+
+        $.ajax({ 
+            data: {id : id}, 
+            type: 'POST',
+            url: "{{route('aluno.checkout')}}",
             success: function(data){
                 $table.bootstrapTable('refresh')
 

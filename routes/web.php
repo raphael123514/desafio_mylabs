@@ -42,3 +42,4 @@ Route::delete('admin/aula/delete/{id}', [App\Http\Controllers\AulaController::cl
 
 Route::get('aula/listar', [App\Http\Controllers\AlunoController::class, 'listar'])->name('aluno.aula.listar');
 Route::post('aluno/checkin', [App\Http\Controllers\AlunoController::class, 'checkin'])->name('aluno.checkin');
+Route::post('aluno/checkout', [App\Http\Controllers\AlunoController::class, 'checkout'])->name('aluno.checkout');

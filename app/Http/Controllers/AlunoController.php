@@ -51,7 +51,42 @@ class AlunoController extends Controller
                 return response('O checkin foi feito com sucesso!', 200);
             }
             
-            abort(400, 'Não é possível fazer check-in antes das 24 horas da aula, nem faltando 30 minutos para começar a aula e aulas que já foi!');
+            abort(400, 'Não é possível fazer checkin antes das 24 horas da aula, nem faltando 30 minutos para começar a aula e aulas que já foi!');
+        } catch(\Exception $exception) {
+            abort(500,$exception->getMessage());
+        }
+    }
+
+    public function checkout(Request $request)
+    {
+        try {
+            $id= $request->id;
+            $checkin = new Checkin;
+
+            $aula = Aula::find($id);
+            $data_hora_atual = date('Y-m-d G:i:s');
+            $data_maxima_check = date('Y-m-d G:i:s', strtotime('- 30 minute', strtotime($aula->data_hora)));
+            $qdte_aluno = --$aula->qtde_aluno;
+
+            $validaCheckin = Checkin::where('user_id', auth()->user()->id)
+                                    ->where('aulas_id', $id)->count();
+            if ($validaCheckin == 0) {
+                abort(400, 'Você não fez checkin para essa aula ainda!');
+
+            }
+
+            if ($data_hora_atual < $data_maxima_check) {
+                $aula->update(['qtde_aluno' => $qdte_aluno]);
+    
+                $checkin::where('user_id', auth()->user()->id)
+                                        ->where('aulas_id', $id)->delete();
+
+                return response('O checkout foi feito com sucesso!', 200);
+            }
+            
+            abort(400, 'Não é possível fazer checkout faltando 30 minutos para começar a aula');
+
+            
         } catch(\Exception $exception) {
             abort(500,$exception->getMessage());
         }
