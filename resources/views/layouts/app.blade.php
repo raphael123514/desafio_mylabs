@@ -34,9 +34,9 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a href="{{route('admin.login')}}"><button class="btn btn-link">Administrador</button></a>
+                <a href="{{route('admin.dashboard')}}"><button class="btn btn-link">Administrador</button></a>
                 
-                <a href="{{route('login')}}"><button class="btn btn-link">Aluno</button> </a>
+                <a href="{{route('home')}}"><button class="btn btn-link">Aluno</button> </a>
                 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
