@@ -3,20 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aula;
+use App\Models\Checkin;
+use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class AlunoController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('auth');
     }
 
-    public function checkin($id)
+    public function checkin(Request $request)
     {
         try {
+            $id= $request->id;
+            $checkin = new Checkin;
+            $aula = Aula::find($id);
+            $data_hora_atual = date('Y-m-d G:i:s');
+            $data_maxima_check = date('Y-m-d G:i:s', strtotime('- 30 minute', strtotime($aula->data_hora)));
+            $data_minima = date('Y-m-d G:i:s', strtotime('- 24 hour', strtotime($aula->data_hora)));
+            
+            if ($data_hora_atual <= $data_maxima_check &&  $data_hora_atual >= $data_minima) {
+                $aula->update(['qtde_aluno' => ++$aula->qtde_aluno]);
+    
+                $checkin->fill([
+                    'user_id' => auth()->user()->id,
+                    'aulas_id' => $id,
+                ]);
+                $checkin->save();
+                return response('O checkin foi feito com sucesso!', 200);
+            }
+            abort(400, 'Não é possível fazer check-in antes das 24 horas da aula, nem faltando 30 minutos para começar a aula e aulas que já foi!');
         } catch(\Exception $exception) {
-            return $exception->getMessage();
+            abort(500,$exception->getMessage());
         }
     }
 
@@ -26,7 +47,7 @@ class AlunoController extends Controller
         try {
             $aulas = new Aula();
             if ($request->opcaoData) {
-                $aulas= $aulas->whereDate(\DB::raw('data_hora::date'),'>', date('Y-m-d'))
+                $aulas= $aulas->whereDate(\DB::raw('data_hora::date'),'>=', date('Y-m-d'))
                 ->whereDate(\DB::raw('data_hora::date'),'<', date('d/m/Y', strtotime('+7 days', strtotime(date('Y-m-d')))));
             } else {
                 $aulas= $aulas->whereDate(\DB::raw('data_hora::date'), date('Y-m-d'));

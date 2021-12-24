@@ -53,6 +53,7 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+{{-- <script src="sweetalert2.all.min.js"></script> --}}
 
 <script>
     $table = $("#table");
@@ -100,31 +101,46 @@
     }
     
     function acoesFormatter(value, row, index) {
-        var urlCheckin = "{{ route('aluno.checkin', ['id' => ':id']) }}"; 
-
-        urlCheckin = urlCheckin.replace(":id", row.id);
-
-        var urlDelete = "{{ route('aula.delete', ['id' => ':id']) }}"; 
-
-        urlDelete = urlDelete.replace(":id", row.id);
         return [
             `
             <div class='row' style="padding-left: 25%">
-                <div class="col-md-5" data-toggle="tooltip" title="Checkin"  style="font-size: 22px;" >
-                    <a href="${urlCheckin}"> <i class="fas fa-check-circle" style="color: rgb(44, 230, 38)"></i></a>
-                </div>
-                <div class="col-md-4" data-toggle="tooltip" title="Remover" style="font-size: 22px;">
-                    <a href="${urlDelete}" onclick="event.preventDefault();
-                                                    document.getElementById('delete-form').submit();">
-                        <i class="fas fa-trash-alt" style="color: rgb(252, 0, 0)"></i>
-                    </a> 
-                    <form id="delete-form" action="${urlDelete}" method="POST" class="d-none">
-                        @method('DELETE')
-                        @csrf
-                    </form>
+                <div class="col-md-1" data-toggle="tooltip" title="Checkin"  style="font-size: 22px;" >
+                    <a onclick="checkin(${row.id})" style="cursor: pointer">
+                        <i class="fas fa-check-circle" style="color: rgb(44, 230, 38)"></i>
+                    </a>
+                    
                 </div>
             </div>`]
     
+    }
+
+    function checkin(id) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        }); 
+
+        $.ajax({ 
+            data: {id : id}, 
+            type: 'POST',
+            url: "{{route('aluno.checkin')}}",
+            success: function(data){
+                console.log(data);
+                Swal.fire({
+                    icon: 'success',
+                    text: data
+                })
+            },
+            error: function(data) {
+                console.log(data);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.responseJSON.message
+                })
+            }
+        });
     }
 
 </script>

@@ -15,6 +15,7 @@ class Aula extends Model
         'nome_prof',
         'duracao',
         'data_hora',
+        'qtde_aluno',
     ];
 
     

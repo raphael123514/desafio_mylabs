@@ -26,6 +26,8 @@
     {{-- bootstrap table --}}
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css">
 
+    {{-- sweetalert --}}
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
 
 </head>
 <body>
@@ -110,7 +112,11 @@
     </div>
     {{-- bootstrap table --}}
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
 
+    {{-- SWEET ALERT --}}
+    {{-- @include('sweetalert::alert') --}}
+    {{-- <script href="{{ asset('vendor/sweetalert/sweetalert.all.js') }}" rel="stylesheet"> --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
 </body>
 </html>
