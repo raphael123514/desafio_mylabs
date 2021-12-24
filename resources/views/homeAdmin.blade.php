@@ -100,10 +100,15 @@
         var urlDelete = "{{ route('aula.delete', ['id' => ':id']) }}"; 
 
         urlDelete = urlDelete.replace(":id", row.id);
+
+        var urlInfo = "{{ route('aula.info', ['id' => ':id']) }}"; 
+
+        urlInfo = urlInfo.replace(":id", row.id);
+
         return [
             `
-            <div class='row' style="padding-left: 25%">
-                <div class="col-md-5" data-toggle="tooltip" title="Editar"  style="font-size: 22px;" >
+            <div class='row' style="padding-left: 15%">
+                <div class="col-md-4" data-toggle="tooltip" title="Editar"  style="font-size: 22px;" >
                     <a href="${urlEdit}"> <i class="far fa-edit" style="color: rgb(9, 43, 192)"></i></a>
                 </div>
                 <div class="col-md-4" data-toggle="tooltip" title="Remover" style="font-size: 22px;">
@@ -115,6 +120,9 @@
                         @method('DELETE')
                         @csrf
                     </form>
+                </div>
+                <div class="col-md-4" data-toggle="tooltip" title="Editar"  style="font-size: 22px;" >
+                    <a href="${urlInfo}"> <i class="fas fa-info" style="color: rgb(0, 0, 0)"></i></a>
                 </div>
             </div>`]
     

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aula;
+use App\Models\Checkin;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
@@ -13,32 +14,27 @@ class AulaController extends Controller
     public function __construct() {
         $this->middleware('auth:admin');
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function show($id)
     {
-        //
+        try {
+            $aula = Aula::find($id);
+            return view('admin.aula.info', ['aula' => $aula]);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
+        
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('admin.aula.form');
+        try {
+            return view('admin.aula.form');
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         try {
@@ -64,25 +60,16 @@ class AulaController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $aula = Aula::find($id);
-        return view('admin.aula.form', ['aula' => $aula]);
+        try {
+            $aula = Aula::find($id);
+            return view('admin.aula.form', ['aula' => $aula]);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         try {
@@ -95,17 +82,11 @@ class AulaController extends Controller
             return Redirect::to("/admin/aula/edit/".$id);
 
         } catch(\Exception $exception) {
-            \Session::flash('mensagem_erro', $Exception->getMessage());
+            \Session::flash('mensagem_erro', $exception->getMessage());
             return Redirect::to("/admin/aula/edit/".$id);
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         try {
@@ -133,27 +114,33 @@ class AulaController extends Controller
     }
 
     function convertHoras($horasInteiras) {
-
-        // Define o formato de saida
-        $formato = '%02d:%02d:%02d';
-        // Converte para minutos
-        $minutos = $horasInteiras * 60;
-    
-        // Converte para o formato hora
-        $horas = floor($minutos / 60);
-        $minutos = ($minutos % 60);
-    
-        // Retorna o valor
-        return sprintf($formato, $horas, $minutos, 00);
+        try {
+            // Define o formato de saida
+            $formato = '%02d:%02d:%02d';
+            // Converte para minutos
+            $minutos = $horasInteiras * 60;
+        
+            // Converte para o formato hora
+            $horas = floor($minutos / 60);
+            $minutos = ($minutos % 60);
+        
+            // Retorna o valor
+            return sprintf($formato, $horas, $minutos, 00);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 
     public function somaDataHora($request)
     {
-
-        $data_hora= date("Y-m-d G:i",strtotime($request->dataHoraAula)) ; 
-        $duracao = vsprintf(" +%d hours +%d minutes +%d seconds", explode(':', $this->convertHoras(round($request->duracao / 60, 2)))); 
-
-        return date('Y-m-d G:i',strtotime($data_hora.$duracao));
+        try {
+            $data_hora= date("Y-m-d G:i",strtotime($request->dataHoraAula)) ; 
+            $duracao = vsprintf(" +%d hours +%d minutes +%d seconds", explode(':', $this->convertHoras(round($request->duracao / 60, 2)))); 
+    
+            return date('Y-m-d G:i',strtotime($data_hora.$duracao));
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 
     public function validaAgendaAulas($request)
@@ -173,6 +160,20 @@ class AulaController extends Controller
                 }
                 
             }
+        } catch(\Exception $exception) {
+            \Session::flash('mensagem_erro', $exception->getMessage());
+            return Redirect::to("/admin/aula/novo");
+        }
+    }
+
+    public function listarAlunos($id)
+    {
+        try {
+            $dados = Checkin::select('users.name as nome')
+                            ->where('aulas_id', $id)
+                            ->leftJoin('users', 'users.id', 'checkins.user_id')
+                            ->get();
+            return $dados;
         } catch(\Exception $exception) {
             return $exception->getMessage();
         }
