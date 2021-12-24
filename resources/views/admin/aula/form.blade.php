@@ -42,14 +42,14 @@
                         <div class="form-group row">
                             <div class="col-md-7">
                                 <label for="qtde_maxima">Quantidade máxima de alunos</label>
-                                <input id="qtdeMaxima" name="qtdeMaxima" type="number" class="form-control" value="{{$aula->qtdeMaxima ?? null}}">
+                                <input id="qtdeMaxima" name="qtde_maxima" type="number" class="form-control" value="{{$aula->qtdeMaxima ?? null}}">
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <div class="col-md-7">
                                 <label for="nomeProf">Nome do professor</label>
-                                <input id="nome_prof" name="nomeProf" type="text" class="form-control" value="{{$aula->nomeProf ?? null}}">
+                                <input id="nome_prof" name="nome_prof" type="text" class="form-control" value="{{$aula->nomeProf ?? null}}">
                             </div>
                         </div>
 
@@ -60,13 +60,13 @@
                             </div>
                         </div>
                         @php
-                            $date = new DateTime($aula->dataHoraAula ?? null);
+                            $date = new DateTime($aula->data_hora ?? null);
                             $dataInput =  $date->format('Y-m-d\TH:i:s'); 
                         @endphp 
                         <div class="form-group row">
                             <div class="col-md-7">
-                                <label for="dataHoraAula">Data/Hora da aula</label>
-                                <input id="data_hora" name="dataHoraAula" type="datetime-local" class="form-control" value="{{isset($aula->dataHoraAula) ? $dataInput : null}}">
+                                <label for="data_hora">Data/Hora da aula</label>
+                                <input id="data_hora" name="data_hora" type="datetime-local" class="form-control" value="{{isset($aula->dataHoraAula) ? $dataInput : null}}">
                             </div>
                         </div>
                         <br>
