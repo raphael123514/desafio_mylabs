@@ -53,7 +53,6 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
-{{-- <script src="sweetalert2.all.min.js"></script> --}}
 
 <script>
     $table = $("#table");
@@ -126,14 +125,12 @@
             type: 'POST',
             url: "{{route('aluno.checkin')}}",
             success: function(data){
-                console.log(data);
                 Swal.fire({
                     icon: 'success',
                     text: data
                 })
             },
             error: function(data) {
-                console.log(data);
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',

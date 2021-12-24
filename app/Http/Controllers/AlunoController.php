@@ -24,9 +24,15 @@ class AlunoController extends Controller
             $data_hora_atual = date('Y-m-d G:i:s');
             $data_maxima_check = date('Y-m-d G:i:s', strtotime('- 30 minute', strtotime($aula->data_hora)));
             $data_minima = date('Y-m-d G:i:s', strtotime('- 24 hour', strtotime($aula->data_hora)));
+            $qdte_aluno = ++$aula->qtde_aluno;
             
+            if ($qdte_aluno > $aula->qtde_maxima) {
+                abort(400, 'Número máximo de alunos foi atingido!');
+
+            }
+
             if ($data_hora_atual <= $data_maxima_check &&  $data_hora_atual >= $data_minima) {
-                $aula->update(['qtde_aluno' => ++$aula->qtde_aluno]);
+                $aula->update(['qtde_aluno' => $qdte_aluno]);
     
                 $checkin->fill([
                     'user_id' => auth()->user()->id,
