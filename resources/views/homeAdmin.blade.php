@@ -51,11 +51,13 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table-locale-all.min.js"></script>
 
 <script>
     $table = $("#table");
     $table.bootstrapTable({
         url:"{{route('aula.listar')}}",
+        locale: 'pt-BR',
         cache:false,
         onLoadSuccess: function (data, d) {
         },
