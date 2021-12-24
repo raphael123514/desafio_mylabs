@@ -52,6 +52,17 @@ class AlunoController extends Controller
         
         try {
             $aulas = new Aula();
+            $aulas = Aula::select(
+                'id',
+                'nome',
+                'qtde_maxima',
+                'nome_prof',
+                'duracao',
+                'data_hora',
+                'qtde_aluno',
+                \DB::raw('(qtde_maxima - qtde_aluno) as qtde_disponivel'),
+            );
+
             if ($request->opcaoData) {
                 $aulas= $aulas->whereDate(\DB::raw('data_hora::date'),'>=', date('Y-m-d'))
                 ->whereDate(\DB::raw('data_hora::date'),'<', date('d/m/Y', strtotime('+7 days', strtotime(date('Y-m-d')))));

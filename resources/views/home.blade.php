@@ -40,7 +40,7 @@
                                 <th data-field="data_hora" data-formatter="transDataBRDia">Dia</th>
                                 <th data-field="data_hora" data-formatter="transDataBRHora">Hora</th>
                                 <th data-field="nome">Aula</th>
-                                <th data-field="qtde_maxima" data-align="center">Vagas disponíveis</th>
+                                <th data-field="qtde_disponivel" data-align="center">Vagas disponíveis</th>
                                 <th data-field="acoes" data-formatter="acoesFormatter" data-align="center">Ações</th>
                             </tr>
                             </thead>
@@ -100,16 +100,25 @@
     }
     
     function acoesFormatter(value, row, index) {
-        return [
-            `
-            <div class='row' style="padding-left: 25%">
-                <div class="col-md-1" data-toggle="tooltip" title="Checkin"  style="font-size: 22px;" >
-                    <a onclick="checkin(${row.id})" style="cursor: pointer">
-                        <i class="fas fa-check-circle" style="color: rgb(44, 230, 38)"></i>
-                    </a>
-                    
-                </div>
-            </div>`]
+        var data = new Date(row.data_hora);
+        data.setDate(data.getDate() - 1);
+        let dataMinimo = data.toLocaleString();
+
+        var dataAtual = new Date().toLocaleString();
+        if (dataAtual > dataMinimo && dataAtual < (new Date(row.data_hora).toLocaleString())) {
+            return [
+                `
+                <div class='row' style="padding-left: 25%">
+                    <div class="col-md-1" data-toggle="tooltip" title="Checkin"  style="font-size: 22px;" >
+                        <a onclick="checkin(${row.id})" style="cursor: pointer">
+                            <i class="fas fa-check-circle" style="color: rgb(44, 230, 38)"></i>
+                        </a>
+                        
+                    </div>
+                </div>`]
+            
+        } 
+        return "";
     
     }
 
@@ -125,6 +134,8 @@
             type: 'POST',
             url: "{{route('aluno.checkin')}}",
             success: function(data){
+                $table.bootstrapTable('refresh')
+
                 Swal.fire({
                     icon: 'success',
                     text: data
