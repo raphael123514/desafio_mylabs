@@ -113,10 +113,10 @@
                 </div>
                 <div class="col-md-4" data-toggle="tooltip" title="Remover" style="font-size: 22px;">
                     <a href="${urlDelete}" onclick="event.preventDefault();
-                                                    document.getElementById('delete-form').submit();">
+                                                    document.getElementById('delete-form${row.id}').submit();">
                         <i class="fas fa-trash-alt" style="color: rgb(252, 0, 0)"></i>
                     </a> 
-                    <form id="delete-form" action="${urlDelete}" method="POST" class="d-none">
+                    <form id="delete-form${row.id}" action="${urlDelete}" method="POST" class="d-none">
                         @method('DELETE')
                         @csrf
                     </form>

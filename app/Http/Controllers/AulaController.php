@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CancelarAula;
 use App\Models\Aula;
 use App\Models\Checkin;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 
 class AulaController extends Controller
@@ -44,10 +46,10 @@ class AulaController extends Controller
 
             $aula->fill([
                 'nome' => $request->nome,
-                'qtde_maxima'=> $request->qtdeMaxima,
-                'nome_prof'=> $request->nomeProf,
+                'qtde_maxima'=> $request->qtde_maxima,
+                'nome_prof'=> $request->nome_prof,
                 'duracao'=> $request->duracao,
-                'data_hora' => date("Y-m-d G:i", strtotime($request->dataHoraAula))
+                'data_hora' => date("Y-m-d G:i", strtotime($request->data_hora))
             ]);
             $aula->save();
 
@@ -90,8 +92,18 @@ class AulaController extends Controller
     public function destroy($id)
     {
         try {
+            $alunos = Checkin::where('aulas_id', $id)
+                            ->leftJoin('users', 'users.id', 'checkins.user_id')
+                            ->leftJoin('aulas', 'aulas.id', 'checkins.aulas_id')
+                            ->get();
+            
+            Checkin::where('aulas_id', $id)->delete();
             Aula::where('id', $id)->delete();
+            
 
+            foreach ($alunos as $key => $aluno) {
+                Mail::to($aluno)->send(new CancelarAula($aluno));
+            }
             \Session::flash('mensagem_sucesso','Aula excluída com sucesso!');
             return Redirect::to("/admin/aula");
         } catch(\Exception $exception) {
@@ -134,7 +146,7 @@ class AulaController extends Controller
     public function somaDataHora($request)
     {
         try {
-            $data_hora= date("Y-m-d G:i",strtotime($request->dataHoraAula)) ; 
+            $data_hora= date("Y-m-d G:i",strtotime($request->data_hora)) ; 
             $duracao = vsprintf(" +%d hours +%d minutes +%d seconds", explode(':', $this->convertHoras(round($request->duracao / 60, 2)))); 
     
             return date('Y-m-d G:i',strtotime($data_hora.$duracao));
@@ -147,9 +159,9 @@ class AulaController extends Controller
     {
         try {
             $totalRequest = $this->somaDataHora($request);
-            $dataInicioResquest = date("Y-m-d G:i", strtotime($request->dataHoraAula));
+            $dataInicioResquest = date("Y-m-d G:i", strtotime($request->data_hora));
             
-            $datas = Aula::select('id','dataHoraAula', 'duracao')->get();
+            $datas = Aula::select('id','data_hora', 'duracao')->get();
             
             foreach ($datas as $key => $d) {
                 $total = $this->somaDataHora($d);
