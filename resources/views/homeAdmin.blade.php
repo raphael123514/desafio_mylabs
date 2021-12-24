@@ -38,7 +38,7 @@
                                 <th data-field="nome">Aula</th>
                                 <th data-field="nome_prof">Professor</th>
                                 <th data-field="qtde_maxima" data-align="center">Qtde de alunos Máximo</th>
-                                <th data-field="qtde_alunos" data-align="center">Qtde de alunos</th>
+                                <th data-field="qtde_aluno" data-align="center">Qtde de alunos</th>
                                 <th data-field="acoes" data-formatter="acoesFormatter" data-align="center">Ações</th>
                               </tr>
                             </thead>
