@@ -9,7 +9,6 @@ class Aula extends Model
 {
     protected $table = 'aulas';
     protected $fillable = [
-        'id',
         'nome',
         'qtde_maxima',
         'nome_prof',

@@ -43,7 +43,12 @@ class AulaController extends Controller
             $aula = new Aula();
 
             $this->validaAgendaAulas($request);
-
+            
+            $valida =  $this->validateCampos($request);
+            if (!$valida) {
+                return redirect("/admin/aula/novo");
+            }
+            
             $aula->fill([
                 'nome' => $request->nome,
                 'qtde_maxima'=> $request->qtde_maxima,
@@ -54,10 +59,10 @@ class AulaController extends Controller
             $aula->save();
 
             \Session::flash('mensagem_sucesso','Aula adicionada com sucesso!');
-            return Redirect::to("/admin/aula");
+            return redirect("/admin/aula");
         } catch (\Exception $Exception){
-            \Session::flash('mensagem_erro', $Exception->getMessage());
-            return Redirect::to("/admin/aula/novo");
+            \Session::flash('mensagem_erro', $Exception->getMessage() . " " . $Exception->getLine(). " " . $Exception->getFile());
+            return redirect("/admin/aula/novo");
 
         }
     }
@@ -75,8 +80,14 @@ class AulaController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $this->validaAgendaAulas($request);
+            $this->validaAgendaAulas($request, $id);
 
+            $valida =  $this->validateCampos($request, $id);
+            if (!$valida) {
+                return Redirect::to("/admin/aula/edit/".$id);
+            }
+            
+            
             $aula = Aula::find($id);
             $aula->update($request->all());
 
@@ -84,7 +95,7 @@ class AulaController extends Controller
             return Redirect::to("/admin/aula/edit/".$id);
 
         } catch(\Exception $exception) {
-            \Session::flash('mensagem_erro', $exception->getMessage());
+            \Session::flash('mensagem_erro', $exception->getMessage() . " ". $exception->getLine() . " " . $exception->getFile());
             return Redirect::to("/admin/aula/edit/".$id);
         }
     }
@@ -155,7 +166,7 @@ class AulaController extends Controller
         }
     }
 
-    public function validaAgendaAulas($request)
+    public function validaAgendaAulas($request, $id=null)
     {
         try {
             $totalRequest = $this->somaDataHora($request);
@@ -168,13 +179,23 @@ class AulaController extends Controller
 
                 if ($total > $dataInicioResquest &&  $total < $totalRequest) {
                     \Session::flash('mensagem_erro', "Já existe uma aula nesse horario.");
-                    return Redirect::to("/admin/aula/novo");
+                    if (!empty($id)) {
+                        return Redirect::to("/admin/aula/edit/".$id);
+                    } else {
+                        return Redirect::to("/admin/aula/novo");
+
+                    }
                 }
                 
             }
         } catch(\Exception $exception) {
             \Session::flash('mensagem_erro', $exception->getMessage());
-            return Redirect::to("/admin/aula/novo");
+            if (!empty($id)) {
+                return Redirect::to("/admin/aula/edit/".$id);
+            } else {
+                return Redirect::to("/admin/aula/novo");
+
+            }
         }
     }
 
@@ -188,6 +209,39 @@ class AulaController extends Controller
             return $dados;
         } catch(\Exception $exception) {
             return $exception->getMessage();
+        }
+    }
+
+    protected function validateCampos(Request $request, $id=null)
+    {
+        try {
+            if (empty($request->nome)) {
+                \Session::flash('mensagem_erro', "O Nome é obrigatorio.");
+                return false;
+            } elseif(empty($request->qtde_maxima)) {
+                \Session::flash('mensagem_erro', "O Quantidade maxima é obrigatorio.");
+                return false;
+            } elseif(empty($request->nome_prof)) {
+                \Session::flash('mensagem_erro', "O Nome do professor é obrigatorio.");
+                return false;
+            } elseif(empty($request->duracao)) {
+                \Session::flash('mensagem_erro', "O Duração é obrigatorio.");
+                return false;
+            } elseif(empty($request->data_hora)) {
+                \Session::flash('mensagem_erro', "O Data/hora é obrigatorio.");
+                return false;
+            } 
+
+            return true;
+
+        } catch(\Exception $exception) {
+            \Session::flash('mensagem_erro', $exception->getMessage());
+            if (!empty($id)) {
+                return Redirect::to("/admin/aula/edit/".$id);
+            } else {
+                return Redirect::to("/admin/aula/novo");
+
+            }
         }
     }
 

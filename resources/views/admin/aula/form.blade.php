@@ -35,28 +35,28 @@
                         <div class="form-group row">
                             <div class="col-md-7">
                                 <label for="nome">Nome da aula</label>
-                                <input id="nome" name="nome" type="text" class="form-control" value="{{$aula->nome ?? null}}">
+                                <input id="nome" name="nome" type="text" class="form-control" value="{{$aula->nome ?? null}}" required>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <div class="col-md-7">
                                 <label for="qtde_maxima">Quantidade máxima de alunos</label>
-                                <input id="qtdeMaxima" name="qtde_maxima" type="number" class="form-control" value="{{$aula->qtdeMaxima ?? null}}">
+                                <input id="qtde_maxima" name="qtde_maxima" type="number" class="form-control" value="{{$aula->qtde_maxima ?? null}}" required>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <div class="col-md-7">
-                                <label for="nomeProf">Nome do professor</label>
-                                <input id="nome_prof" name="nome_prof" type="text" class="form-control" value="{{$aula->nomeProf ?? null}}">
+                                <label for="nome_prof">Nome do professor</label>
+                                <input id="nome_prof" name="nome_prof" type="text" class="form-control" value="{{$aula->nome_prof ?? null}}" required>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <div class="col-md-7">
                                 <label for="duracao">Duração da aula</label>
-                                <input id="duracao" name="duracao" type="datetime" class="form-control" value="{{$aula->duracao ?? null}}">
+                                <input id="duracao" name="duracao" type="datetime" class="form-control" value="{{$aula->duracao ?? null}}" required>
                             </div>
                         </div>
                         @php
@@ -66,7 +66,7 @@
                         <div class="form-group row">
                             <div class="col-md-7">
                                 <label for="data_hora">Data/Hora da aula</label>
-                                <input id="data_hora" name="data_hora" type="datetime-local" class="form-control" value="{{isset($aula->dataHoraAula) ? $dataInput : null}}">
+                                <input id="data_hora" name="data_hora" type="datetime-local" class="form-control" value="{{isset($aula->data_hora) ? $dataInput : null}}" required>
                             </div>
                         </div>
                         <br>
