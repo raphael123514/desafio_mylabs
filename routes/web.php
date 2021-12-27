@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/aluno', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
@@ -42,6 +42,6 @@ Route::get('admin/aluno/listar/{id}', [App\Http\Controllers\AulaController::clas
 
 // ROTAS ALUNO
 
-Route::get('aula/listar', [App\Http\Controllers\AlunoController::class, 'listar'])->name('aluno.aula.listar');
+Route::get('aluno/aula/listar', [App\Http\Controllers\AlunoController::class, 'listar'])->name('aluno.aula.listar');
 Route::post('aluno/checkin', [App\Http\Controllers\AlunoController::class, 'checkin'])->name('aluno.checkin');
 Route::post('aluno/checkout', [App\Http\Controllers\AlunoController::class, 'checkout'])->name('aluno.checkout');

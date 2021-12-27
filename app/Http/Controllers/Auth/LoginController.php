@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/aluno';
 
     /**
      * Create a new controller instance.
@@ -45,7 +45,7 @@ class LoginController extends Controller
         if(Auth::guard('admin')->check()) // this means that the admin was logged in.
         {
             Auth::guard('admin')->logout();
-            return redirect()->route('home');
+            return redirect()->route('admin.login');
         }
 
         $this->guard()->logout();

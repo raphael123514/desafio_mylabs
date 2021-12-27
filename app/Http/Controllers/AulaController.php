@@ -42,7 +42,10 @@ class AulaController extends Controller
         try {
             $aula = new Aula();
 
-            $this->validaAgendaAulas($request);
+            $validaAgenda = $this->validaAgendaAulas($request);
+            if (!$validaAgenda) {
+                return redirect("/admin/aula/novo");
+            }
             
             $valida =  $this->validateCampos($request);
             if (!$valida) {
@@ -80,7 +83,10 @@ class AulaController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $this->validaAgendaAulas($request, $id);
+            $validaAgenda = $this->validaAgendaAulas($request, $id);
+            if (!$validaAgenda) {
+                return Redirect::to("/admin/aula/edit/".$id);
+            }
 
             $valida =  $this->validateCampos($request, $id);
             if (!$valida) {
@@ -179,15 +185,11 @@ class AulaController extends Controller
 
                 if ($total > $dataInicioResquest &&  $total < $totalRequest) {
                     \Session::flash('mensagem_erro', "Já existe uma aula nesse horario.");
-                    if (!empty($id)) {
-                        return Redirect::to("/admin/aula/edit/".$id);
-                    } else {
-                        return Redirect::to("/admin/aula/novo");
-
-                    }
+                    return false;
                 }
                 
             }
+            return true;
         } catch(\Exception $exception) {
             \Session::flash('mensagem_erro', $exception->getMessage());
             if (!empty($id)) {
