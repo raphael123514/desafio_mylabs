@@ -89,15 +89,28 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+                                    @if (Request::is('admin/*'))
+                                        <a class="dropdown-item" href="{{ route('admin.logout.submit') }}"
+                                        onclick="event.preventDefault();
+                                                        document.getElementById('logout-form-admin').submit();">
+                                            {{ __('Logout') }}
+                                        </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
+                                        <form id="logout-form-admin" action="{{ route('admin.logout.submit') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    @else
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault();
+                                                        document.getElementById('logout-form').submit();">
+                                            {{ __('Logout') }}
+                                        </a>
+
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                        
+                                    @endif
                                 </div>
                             </li>
                         @endguest
@@ -113,6 +126,7 @@
     {{-- bootstrap table --}}
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table-locale-all.min.js"></script>
 
     {{-- SWEET ALERT --}}
     {{-- @include('sweetalert::alert') --}}

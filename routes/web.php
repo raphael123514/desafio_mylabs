@@ -27,7 +27,7 @@ Route::get('/admin/login', [App\Http\Controllers\Auth\AdminLoginController::clas
 Route::post('/admin/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'login'])->name('admin.login.submit');
 Route::get('/admin/register', [App\Http\Controllers\Auth\RegisterAdminController::class, 'index'])->name('admin.register');
 Route::post('/admin/register', [App\Http\Controllers\Auth\RegisterAdminController::class, 'create'])->name('admin.register.submit');
-// Route::post('/admin/logout', [App\Http\Controllers\Auth\AdminLoginController::class, 'logout'])->name('admin.logout.submit');
+Route::post('/admin/logout', [App\Http\Controllers\Auth\AdminLoginController::class, 'logout'])->name('admin.logout.submit');
 
 // ROTAS AULAS ADMIN
 
