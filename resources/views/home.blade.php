@@ -21,6 +21,9 @@
                         </div>
                     @endif
                     <div class="form-group row">
+                        <div class="col-md-1">
+                            <label for="opcaoData">Escolha:</label>
+                        </div>
                         <div class="col-md-3">
                             <select class="form-control" id="opcaoData">
                                 <option value="0">Dia atual</option>
