@@ -39,8 +39,7 @@ class AlunoController extends Controller
                 abort(400, 'Número máximo de alunos foi atingido!');
 
             }
-
-            if ($data_hora_atual <= $data_maxima_check &&  $data_hora_atual >= $data_minima) {
+            if (strtotime($data_hora_atual) <= strtotime($data_maxima_check) &&  strtotime($data_hora_atual) >= strtotime($data_minima)) {
                 $aula->update(['qtde_aluno' => $qdte_aluno]);
     
                 $checkin->fill([
@@ -50,7 +49,6 @@ class AlunoController extends Controller
                 $checkin->save();
                 return response('O checkin foi feito com sucesso!', 200);
             }
-            
             abort(400, 'Não é possível fazer checkin antes das 24 horas da aula, nem faltando 30 minutos para começar a aula e aulas que já foi!');
         } catch(\Exception $exception) {
             abort(500,$exception->getMessage());
